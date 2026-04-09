@@ -24,8 +24,8 @@ export function UVDisplay({ uv, sunriseTime, sunsetTime, locationName }: UVDispl
     <div className="animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
       <Card className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
         <div className={`relative p-4 sm:p-6 ${getGradientClass(uv)} transition-all duration-500`}>
-          <div className="absolute top-4 right-4 opacity-20 animate-pulse">
-            <Sun className="h-16 w-16 sm:h-24 sm:w-24 text-white" />
+          <div className="absolute top-4 right-4 opacity-10">
+            <Sun className="h-16 w-16 sm:h-24 sm:w-24 text-white animate-pulse" />
           </div>
 
           <div className="relative z-10">

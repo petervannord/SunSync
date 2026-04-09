@@ -43,7 +43,7 @@ export function UVForecast({ forecast, minRange = 4, maxRange = 7 }: UVForecastP
                   className="animate-in fade-in-0 zoom-in-95 duration-300"
                   style={{ animationDelay: `${idx * 100}ms` }}
                 >
-                  <TabsTrigger value={String(idx)} className="text-xs px-1 relative overflow-hidden hover:scale-105 transition-transform duration-200">
+                  <TabsTrigger value={String(idx)} className="text-xs px-1 hover:scale-105 transition-transform duration-200">
                     <span className="hidden sm:inline">{day.dayName}</span>
                     <span className="sm:hidden">{day.dayName.slice(0, 3)}</span>
                   </TabsTrigger>
@@ -108,7 +108,7 @@ function HourCard({ hour, uv, isOptimal }: { hour: number; uv: number; isOptimal
           bgClass
         )}
       >
-        <span className="animate-in fade-in-0 zoom-in-95 duration-200">{uv}</span>
+        <span className="font-bold">{uv}</span>
         {isOptimal && (
           <div className="absolute inset-0 bg-gradient-to-br from-yellow-300/20 to-orange-400/20 rounded-full animate-pulse" />
         )}

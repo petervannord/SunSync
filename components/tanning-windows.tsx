@@ -23,9 +23,7 @@ export function TanningWindows({ forecast, minRange = 4, maxRange = 7 }: Tanning
       <Card className="hover:shadow-lg transition-shadow duration-300">
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-lg">
-            <div className="animate-bounce">
-              <Sun className="h-5 w-5 text-primary" />
-            </div>
+            <Sun className="h-5 w-5 text-primary" />
             Best Times to Tan
           </CardTitle>
         </CardHeader>
@@ -103,9 +101,7 @@ function WindowCard({ window }: { window: TanningWindow }) {
   return (
     <div className="flex items-center justify-between p-3 bg-primary/10 rounded-lg cursor-pointer hover:bg-primary/15 transition-colors duration-200">
       <div className="flex items-center gap-3">
-        <div className="animate-bounce">
-          <Clock className="h-4 w-4 text-primary" />
-        </div>
+        <Clock className="h-4 w-4 text-primary" />
         <span className="font-medium">
           {formatHour(window.startHour)} - {formatHour(window.endHour)}
         </span>
@@ -142,11 +138,9 @@ function UpcomingDayCard({ day }: { day: UVForecastDay }) {
         </p>
       </div>
       {hasWindows && (
-        <div className="animate-pulse">
-          <Badge variant="secondary" className="text-xs">
-            {day.maxUv} UV max
-          </Badge>
-        </div>
+        <Badge variant="secondary" className="text-xs">
+          {day.maxUv} UV max
+        </Badge>
       )}
     </div>
   )

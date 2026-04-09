@@ -258,7 +258,7 @@ export default function HomePage() {
 
             {/* UV Scale */}
             <div className="animate-in fade-in-0 slide-in-from-left-4 duration-500 delay-100">
-              <UVScale />
+              <UVScale currentUV={uvData.current.uv} />
             </div>
 
             {/* Best Tanning Times */}

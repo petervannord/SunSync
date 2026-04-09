@@ -53,17 +53,17 @@ export function UVScale({ currentUV, minRange = 4, maxRange = 7, className }: UV
         
         {/* Tanning range indicator */}
         <div
-          className="absolute top-0 h-3 border-2 border-white rounded-sm shadow-md pointer-events-none"
+          className="absolute top-0 h-3 border-2 border-white rounded-sm shadow-md pointer-events-none z-10"
           style={{
             left: `${(minRange / 11) * 100}%`,
-            width: `${((maxRange - minRange + 1) / 12) * 100}%`,
+            width: `${((maxRange - minRange + 1) / 11) * 100}%`,
           }}
         />
         
         {/* Current UV indicator */}
         <div
-          className="absolute -top-1 h-5 w-1 bg-foreground rounded-full shadow-lg transition-all duration-300"
-          style={{ left: `calc(${currentPosition}% - 2px)` }}
+          className="absolute -top-1 h-5 w-1 bg-foreground rounded-full shadow-lg transition-all duration-300 z-20"
+          style={{ left: `${currentPosition}%`, transform: 'translateX(-50%)' }}
         />
       </div>
       
