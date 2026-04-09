@@ -2,7 +2,7 @@
 
 A modern, privacy-first UV index forecasting app that helps users find the perfect time to tan. Get real-time personalized UV forecasts for your location with zero data collection.
 
-**[Live Demo](https://sunsync-app.vercel.app)** | **[GitHub](https://github.com/petervannord/SunSync)**
+**[Live Demo](https://sunsync99.vercel.app)** | **[GitHub](https://github.com/petervannord/SunSync)**
 
 ## 🌟 Features
 
