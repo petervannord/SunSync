@@ -159,40 +159,71 @@ export default function HomePage() {
   const [location, setLocation] = useState<{ lat: number; lng: number; name: string } | null>(null)
   const [preferences, setPreferences] = useState(() => getPreferences())
   const [initialLoading, setInitialLoading] = useState(true)
+  const [uvData, setUvData] = useState<UVResponse | null>(null)
+  const [apiError, setApiError] = useState<string | null>(null)
 
-  // Get dynamic UV data
-  const uvData = getDynamicUVData()
+  // Fetch real UV data from API
+  const fetchUVData = useCallback(async (lat: number, lng: number) => {
+    try {
+      setApiError(null)
+      const response = await fetch(`/api/uv?lat=${lat}&lng=${lng}`)
+      if (!response.ok) throw new Error('Failed to fetch UV data')
+      const data = await response.json()
+      setUvData(data)
+    } catch (error) {
+      console.error('Error fetching UV data:', error)
+      setApiError('Unable to fetch UV data. Using fallback data.')
+      // Fallback to static data on error
+      setUvData({
+        ...staticUVData,
+        current: {
+          ...staticUVData.current,
+          uv: getCurrentUV()
+        }
+      })
+    }
+  }, [])
 
   // Initialize location from saved preferences or use default
   useEffect(() => {
     const prefs = getPreferences()
     setPreferences(prefs)
 
-    if (prefs.savedLocation) {
-      setLocation(prefs.savedLocation)
-    } else {
+    let locToUse = prefs.savedLocation
+
+    if (!locToUse) {
       // Default location for minimal deployment
-      setLocation({ lat: 40.7128, lng: -74.006, name: 'New York' })
+      locToUse = { lat: 40.7128, lng: -74.006, name: 'New York' }
     }
+
+    setLocation(locToUse)
+    // Fetch UV data for the location
+    fetchUVData(locToUse.lat, locToUse.lng)
     setInitialLoading(false)
-  }, [])
+  }, [fetchUVData])
 
   // Refresh preferences when page comes back into focus
   useEffect(() => {
     const handleFocus = () => {
       const updatedPrefs = getPreferences()
       setPreferences(updatedPrefs)
+      // Refresh UV data when page regains focus
+      if (location) {
+        fetchUVData(location.lat, location.lng)
+      }
     }
 
     window.addEventListener('focus', handleFocus)
     return () => window.removeEventListener('focus', handleFocus)
-  }, [])
+  }, [location, fetchUVData])
 
   const handleLocationChange = useCallback((lat: number, lng: number, name: string) => {
     const newLocation = { lat, lng, name }
     setLocation(newLocation)
     savePreferences({ savedLocation: newLocation })
-  }, [])
+    // Fetch UV data for the new location
+    fetchUVData(lat, lng)
+  }, [fetchUVData])
 
   if (initialLoading) {
     return (
@@ -246,25 +277,31 @@ export default function HomePage() {
           </div>
         ) : (
           <div className="space-y-6">
+            {apiError && (
+              <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-sm text-destructive animate-in fade-in-0 slide-in-from-top-2 duration-300">
+                {apiError}
+              </div>
+            )}
+
             {/* Current UV Display */}
             <div className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
               <UVDisplay
-                uv={uvData.current.uv}
-                sunriseTime={uvData.current.sunrise}
-                sunsetTime={uvData.current.sunset}
+                uv={uvData?.current.uv ?? 0}
+                sunriseTime={uvData?.current.sunrise}
+                sunsetTime={uvData?.current.sunset}
                 locationName={location?.name}
               />
             </div>
 
             {/* UV Scale */}
             <div className="animate-in fade-in-0 slide-in-from-left-4 duration-500 delay-100">
-              <UVScale currentUV={uvData.current.uv} />
+              <UVScale currentUV={uvData?.current.uv ?? 0} />
             </div>
 
             {/* Best Tanning Times */}
             <div className="animate-in fade-in-0 slide-in-from-right-4 duration-500 delay-200">
               <TanningWindows
-                forecast={uvData.forecast}
+                forecast={uvData?.forecast ?? []}
                 minRange={preferences.uvMinRange}
                 maxRange={preferences.uvMaxRange}
               />
@@ -273,7 +310,7 @@ export default function HomePage() {
             {/* Forecast */}
             <div className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-300">
               <UVForecast
-                forecast={uvData.forecast}
+                forecast={uvData?.forecast ?? []}
                 minRange={preferences.uvMinRange}
                 maxRange={preferences.uvMaxRange}
               />
