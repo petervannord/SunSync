@@ -242,10 +242,8 @@ This project is open source and available under the MIT License. See the LICENSE
 
 ## 👨‍💻 Developer
 
-**Peter Van Noord**
+**Peter Van Nord**
 - GitHub: [@petervannord](https://github.com/petervannord)
-- Portfolio: [petervannord.dev](https://petervannord.dev)
-- Email: [your-email@example.com]
 
 ## 🙏 Acknowledgments
 
