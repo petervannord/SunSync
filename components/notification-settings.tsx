@@ -107,8 +107,8 @@ export function NotificationSettings({ preferences, onUpdate, location }: Notifi
           longitude: location.lon,
           locationName: location.name,
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          uvMin: preferences.uvRange[0],
-          uvMax: preferences.uvRange[1],
+          uvMin: preferences.uvMinRange,
+          uvMax: preferences.uvMaxRange,
           notificationTime: preferences.notificationTime,
         }),
       })

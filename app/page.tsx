@@ -10,18 +10,9 @@ import { UVForecast } from '@/components/uv-forecast'
 import { TanningWindows } from '@/components/tanning-windows'
 import { LocationPicker } from '@/components/location-picker'
 import { InstallBanner } from '@/components/install-banner'
+import { WelcomeModal } from '@/components/welcome-modal'
 import { getPreferences, savePreferences } from '@/lib/storage'
 import type { UVForecastDay } from '@/lib/uv-types'
-
-interface UVResponse {
-  current: {
-    uv: number
-    sunrise: string
-    sunset: string
-  }
-  forecast: UVForecastDay[]
-  location: string
-}
 
 interface UVResponse {
   current: {
@@ -186,12 +177,21 @@ export default function HomePage() {
     setInitialLoading(false)
   }, [])
 
+  // Refresh preferences when page comes back into focus
+  useEffect(() => {
+    const handleFocus = () => {
+      const updatedPrefs = getPreferences()
+      setPreferences(updatedPrefs)
+    }
+
+    window.addEventListener('focus', handleFocus)
+    return () => window.removeEventListener('focus', handleFocus)
+  }, [])
+
   const handleLocationChange = useCallback((lat: number, lng: number, name: string) => {
     const newLocation = { lat, lng, name }
     setLocation(newLocation)
     savePreferences({ savedLocation: newLocation })
-    // Also save to localStorage for settings page access
-    localStorage.setItem('sunsync_location', JSON.stringify({ lat, lon: lng, name }))
   }, [])
 
   if (initialLoading) {
@@ -305,6 +305,14 @@ export default function HomePage() {
       <div className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-1000">
         <InstallBanner />
       </div>
+
+      {/* Welcome Modal */}
+      <WelcomeModal
+        onLocationChange={handleLocationChange}
+        onDismiss={() => {
+          // Modal dismissed, location will be set if user enabled it
+        }}
+      />
     </main>
   )
 }

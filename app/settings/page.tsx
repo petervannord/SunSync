@@ -23,16 +23,16 @@ export default function SettingsPage() {
   const [location, setLocation] = useState<StoredLocation | null>(null)
 
   useEffect(() => {
-    setPreferences(getPreferences())
+    const prefs = getPreferences()
+    setPreferences(prefs)
     
-    // Load stored location from localStorage
-    const storedLocation = localStorage.getItem('sunsync_location')
-    if (storedLocation) {
-      try {
-        setLocation(JSON.parse(storedLocation))
-      } catch {
-        // Invalid stored location
-      }
+    // Load stored location from preferences
+    if (prefs.savedLocation) {
+      setLocation({
+        lat: prefs.savedLocation.lat,
+        lon: prefs.savedLocation.lng,
+        name: prefs.savedLocation.name,
+      })
     }
   }, [])
 
@@ -72,9 +72,7 @@ export default function SettingsPage() {
           <Card className="hover:shadow-lg transition-shadow duration-300">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
-                <div className="animate-bounce">
-                  <Sun className="h-5 w-5 text-primary" />
-                </div>
+                <Sun className="h-5 w-5 text-primary" />
                 Optimal UV Range
               </CardTitle>
               <CardDescription>
