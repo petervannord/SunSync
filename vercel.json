@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/send-uv-alerts",
+      "schedule": "0 7 * * *"
+    }
+  ]
+}
