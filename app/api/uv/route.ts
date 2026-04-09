@@ -83,24 +83,25 @@ function processForecastData(data: OpenMeteoResponse): UVForecastDay[] {
   const forecast: UVForecastDay[] = []
   const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   
-  // Get today's date for comparison
+  // Get today's date in UTC for correct comparison
   const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const tomorrow = new Date(today)
-  tomorrow.setDate(tomorrow.getDate() + 1)
+  const todayUTC = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()))
+  const tomorrow = new Date(todayUTC)
+  tomorrow.setUTCDate(tomorrow.getUTCDate() + 1)
 
   days.forEach((hours, dateKey) => {
-    const date = new Date(dateKey)
-    date.setHours(0, 0, 0, 0)
+    // Parse the date string (format: YYYY-MM-DD) as UTC
+    const [year, month, day] = dateKey.split('-').map(Number)
+    const date = new Date(Date.UTC(year, month - 1, day))
     
     // Determine day name based on actual date comparison
     let dayName: string
-    if (date.getTime() === today.getTime()) {
+    if (date.getTime() === todayUTC.getTime()) {
       dayName = 'Today'
     } else if (date.getTime() === tomorrow.getTime()) {
       dayName = 'Tomorrow'
     } else {
-      dayName = dayNames[date.getDay()]
+      dayName = dayNames[date.getUTCDay()]
     }
 
     // Filter to daylight hours (6am - 8pm) for UV relevance
