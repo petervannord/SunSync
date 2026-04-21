@@ -261,6 +261,6 @@ This project is open source and available under the MIT License. See the LICENSE
 
 ---
 
-**Made with ☀️ and ❤️**
+**Made with 😏 and ❤️**
 
 Built as a portfolio project showcasing modern web development practices: responsive design, progressive web apps, privacy-first architecture, and clean code.
